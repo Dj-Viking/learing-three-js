@@ -1,0 +1,5 @@
+*.css
+*.svg
+*.js
+.eslintrc.js
+three.js
