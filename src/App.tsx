@@ -1,42 +1,35 @@
 import React from 'react';
+import { Scene } from './webgl-engine/Scene';
+import { Renderer } from './webgl-engine/Renderer';
+import { CreateCamera } from './webgl-engine/Camera';
+import { Cube } from './webgl-engine/Cube';
 import './App.css';
-import * as THREE from "three";
 
 const App: React.FC<Record<string, unknown>> = () => {
   const { innerHeight, innerWidth } = window;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({
-    
-  });
-  renderer.setSize(innerWidth, innerHeight);
-
-  window.document.body.appendChild(renderer.domElement);
-
-  const geometry = new THREE.BoxGeometry(5, 5, 5, 10, 10, 0);
-  const material = new THREE.MeshBasicMaterial({   
-    color: 0x00ff00,
-    wireframe: true
-  });
-
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
+  const camera = CreateCamera(innerWidth, innerHeight);
   window.document.addEventListener("mousemove", (event) => {
     // console.log("mouse event CLIENT X Y", event.clientX, event.clientY);
     camera.position.z = 5 + (event.clientY / 30) / 2;
   });
+  
+  Renderer.setSize(innerWidth, innerHeight);
+  window.document.body.appendChild(Renderer.domElement);
+
+  Scene.add(Cube);
 
   function animate(): void {
-    const num = requestAnimationFrame(animate);
+    // const num = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
-    cube.rotation.x += num / 10000 + 0.01;
-    cube.rotation.y += num / 10000;
-    renderer.render(scene, camera);
+    Cube.rotation.x += 0.01;
+    Cube.rotation.y += 0.01;
+    Renderer.render(Scene, camera);
   }
 
   animate();
 
-  console.log("what is renderer dom element", renderer.domElement);
+  console.log("what is Renderer dom element", Renderer.domElement);
   return (
     <></>
   );
