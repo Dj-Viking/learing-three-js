@@ -1,6 +1,20 @@
 import * as THREE from "three";
 import { PerspectiveCamera } from "three";
 
-export const CreateCamera = (innerWidth: number, innerHeight: number): PerspectiveCamera => { 
-  return new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000); 
+const fov = 75;
+const near = 0.1;
+const far = 1000;
+
+export const CreateCamera = (
+  innerWidth: number, 
+  innerHeight: number
+): PerspectiveCamera => {
+  const aspect = innerWidth / innerHeight;
+  
+  return new THREE.PerspectiveCamera(
+    fov, 
+    aspect, 
+    near, 
+    far
+  ); 
 };

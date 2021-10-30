@@ -43,6 +43,8 @@ module.exports = {
     "react-native",
   ],
   rules: {
+    "@typescript-eslint/no-explicit-any": "off",
+    camelcase: "off",
     "arrow-body-style": "off",
     "comma-spacing": "off",
     "jsx-a11y/no-static-element-interactions": "off",

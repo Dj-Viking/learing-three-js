@@ -44,6 +44,11 @@
   </a>
 
 
+## Resources for camera aspect changing
+
+  * <a rel="noopener noreferrer" href="https://threejsfundamentals.org/threejs/lessons/threejs-responsive.html">
+  resize camera aspect with window resize event
+  </a>
 
 
 

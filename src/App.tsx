@@ -1,35 +1,58 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
+import * as THREE from "three";
 import { Scene } from './webgl-engine/Scene';
 import { Renderer } from './webgl-engine/Renderer';
 import { CreateCamera } from './webgl-engine/Camera';
-import { Cube } from './webgl-engine/Cube';
+import { Cube , uniforms } from './webgl-engine/Cube';
 import './App.css';
 
 const App: React.FC<Record<string, unknown>> = () => {
   const { innerHeight, innerWidth } = window;
-  const camera = CreateCamera(innerWidth, innerHeight);
-  window.document.addEventListener("mousemove", (event) => {
-    // console.log("mouse event CLIENT X Y", event.clientX, event.clientY);
-    camera.position.z = 5 + (event.clientY / 30) / 2;
+  const Camera = CreateCamera(innerWidth, innerHeight);
+  document.addEventListener("mousemove", (event) => {
+    uniforms.u_mouse.value.x = event.clientX;
+    uniforms.u_mouse.value.y = event.clientY;
+    
+    Camera.position.z = 5 + (event.clientY / 30) / 2;
   });
+  const onWindowResize = useCallback(() => {
+    if (uniforms.u_resolution !== undefined) {
+      uniforms.u_resolution.value.x = innerWidth;
+      uniforms.u_resolution.value.y = innerHeight;
+    }
+    Camera.aspect = innerWidth / innerHeight;
+    Camera.updateProjectionMatrix();
+    Renderer.setSize(innerWidth, innerHeight);
+  }, [innerHeight, innerWidth, Camera]);
   
-  Renderer.setSize(innerWidth, innerHeight);
+  useEffect(() => {
+    if (window) {
+      window.onresize = onWindowResize;
+    }
+  }, [onWindowResize]);
+  
   window.document.body.appendChild(Renderer.domElement);
 
   Scene.add(Cube);
 
+  // true start automatically
+  const clock = new THREE.Clock(true);
+
   function animate(): void {
-    // const num = requestAnimationFrame(animate);
     requestAnimationFrame(animate);
 
     Cube.rotation.x += 0.01;
     Cube.rotation.y += 0.01;
-    Renderer.render(Scene, camera);
-  }
 
+    uniforms.u_time.value = clock.getElapsedTime();
+    
+    Renderer.render(Scene, Camera);
+  }
+  
+  Renderer.setSize(innerWidth, innerHeight, false);
+ 
   animate();
 
-  console.log("what is Renderer dom element", Renderer.domElement);
   return (
     <></>
   );
