@@ -43,6 +43,7 @@ module.exports = {
     "react-native",
   ],
   rules: {
+    "no-param-reassign": "off",
     "@typescript-eslint/no-explicit-any": "off",
     camelcase: "off",
     "arrow-body-style": "off",

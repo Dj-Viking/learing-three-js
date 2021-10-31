@@ -1,47 +1,55 @@
-import React, { useEffect, useCallback } from 'react';
-import * as THREE from "three";
-import { Scene } from './webgl-engine/Scene';
-import { Renderer } from './webgl-engine/Renderer';
-import { CreateCamera } from './webgl-engine/Camera';
-import { Cube , uniforms } from './webgl-engine/Cube';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import * as THREE from "three"; 
+import { Scene } from "./webgl-engine/Scene";
+import { Renderer } from "./webgl-engine/Renderer";
+import { CreateCamera } from "./webgl-engine/Camera";
+import { Cube , uniforms } from "./webgl-engine/Cube";
+import "./App.css";
+import { setCanvasDimensions } from "./utils/setCanvasDimensions";
 
 const App: React.FC<Record<string, unknown>> = () => {
   const { innerHeight, innerWidth } = window;
+  const [windowHeightState, setWindowHeightState] = useState(innerHeight);
+  const [windowWidthState, setWindowWidthState] = useState(innerWidth);
   const Camera = CreateCamera(innerWidth, innerHeight);
+
   document.addEventListener("mousemove", (event) => {
     uniforms.u_mouse.value.x = event.clientX;
     uniforms.u_mouse.value.y = event.clientY;
     
     Camera.position.z = 5 + (event.clientY / 30) / 2;
   });
-  const onWindowResize = useCallback(() => {
-    if (uniforms.u_resolution !== undefined) {
-      uniforms.u_resolution.value.x = innerWidth;
-      uniforms.u_resolution.value.y = innerHeight;
-    }
-    Camera.aspect = innerWidth / innerHeight;
-    Camera.updateProjectionMatrix();
-    Renderer.setSize(innerWidth, innerHeight);
-  }, [innerHeight, innerWidth, Camera]);
-  
-  useEffect(() => {
-    if (window) {
-      window.onresize = onWindowResize;
-    }
-  }, [onWindowResize]);
   
   window.document.body.appendChild(Renderer.domElement);
 
   Scene.add(Cube);
 
+  if (window) {
+    window.addEventListener("resize", () => {
+      window.innerHeight !== windowHeightState && setWindowHeightState(window.innerHeight);
+
+      window.innerWidth !== windowWidthState && setWindowWidthState(window.innerHeight);
+    }, false);
+  }
+
+  useEffect(() => {
+    if (
+      windowHeightState === window.innerHeight 
+      && windowWidthState === window.innerWidth
+    ) {
+      setCanvasDimensions(Renderer.domElement, windowWidthState, windowHeightState);
+    }
+    Renderer.setSize(windowWidthState, windowHeightState);
+    return void 0;
+  }, [windowHeightState, windowWidthState]);
+
   // true start automatically
   const clock = new THREE.Clock(true);
-
+  
   function animate(): void {
     requestAnimationFrame(animate);
-
-    Cube.rotation.x += 0.01;
+    
+    Cube.rotation.x += 0.05;
     Cube.rotation.y += 0.01;
 
     uniforms.u_time.value = clock.getElapsedTime();
@@ -49,9 +57,11 @@ const App: React.FC<Record<string, unknown>> = () => {
     Renderer.render(Scene, Camera);
   }
   
-  Renderer.setSize(innerWidth, innerHeight, false);
- 
-  animate();
+  Renderer.setSize(innerWidth, innerHeight);
+  
+  window.addEventListener("DOMContentLoaded", () => {
+    animate();
+  });
 
   return (
     <></>
