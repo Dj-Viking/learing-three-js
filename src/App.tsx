@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as THREE from "three"; 
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Scene } from "./webgl-engine/Scene";
 import { Renderer } from "./webgl-engine/Renderer";
 import { CreateCamera } from "./webgl-engine/Camera";
@@ -13,12 +14,26 @@ const App: React.FC<Record<string, unknown>> = () => {
   const [windowWidthState, setWindowWidthState] = useState(innerWidth);
   const Camera = CreateCamera(innerWidth, innerHeight);
 
+  const controls = new OrbitControls(
+    Camera, Renderer.domElement
+  );
+  controls.target.set(0, 20, 0);
+  controls.update();
+
   document.addEventListener("mousemove", (event) => {
     uniforms.u_mouse.value.x = event.clientX;
     uniforms.u_mouse.value.y = event.clientY;
-    
-    Camera.position.z = 5 + (event.clientY / 30) / 2;
   });
+  
+  // document.addEventListener("keyup", (event) => {
+  //   // Camera.position.z = 5 + (event.clientY / 30) / 2;
+  //   if (event.key === "ArrowUp") {
+  //     Camera.position.z += 5;
+  //   }
+  //   if (event.key === "ArrowDown") {
+  //     Camera.position.z -= 5;
+  //   }
+  // });
   
   window.document.body.appendChild(Renderer.domElement);
 
@@ -49,11 +64,11 @@ const App: React.FC<Record<string, unknown>> = () => {
   function animate(): void {
     requestAnimationFrame(animate);
     
-    Cube.rotation.x += 0.05;
-    Cube.rotation.y += 0.01;
+    Cube.rotation.x += 0.001;
+    Cube.rotation.y += 0.001;
 
     uniforms.u_time.value = clock.getElapsedTime();
-    
+
     Renderer.render(Scene, Camera);
   }
   

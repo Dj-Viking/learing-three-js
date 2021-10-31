@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { PerspectiveCamera } from "three";
 
 const fov = 75;
-const near = 0.1;
+const near = 0.01;
 const far = 1000;
 
 export const CreateCamera = (
