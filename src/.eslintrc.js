@@ -44,6 +44,7 @@ module.exports = {
   ],
   rules: {
     "no-param-reassign": "off",
+    "no-multi-assign": "off",
     "@typescript-eslint/no-explicit-any": "off",
     camelcase: "off",
     "arrow-body-style": "off",

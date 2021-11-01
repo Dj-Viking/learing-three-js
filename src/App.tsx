@@ -23,10 +23,11 @@ const App: React.FC<Record<string, unknown>> = () => {
   document.addEventListener("mousemove", (event) => {
     uniforms.u_mouse.value.x = event.clientX;
     uniforms.u_mouse.value.y = event.clientY;
+
+    // Camera.position.z = 5 + (event.clientY / 30) / 2;
   });
   
   // document.addEventListener("keyup", (event) => {
-  //   // Camera.position.z = 5 + (event.clientY / 30) / 2;
   //   if (event.key === "ArrowUp") {
   //     Camera.position.z += 5;
   //   }

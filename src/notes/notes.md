@@ -52,5 +52,10 @@
 
 
 
+## HOW TO PUT TEXTURES ON CUBE THREE JS
 
+  * <a rel="noopener noreferrer" href="https://discourse.threejs.org/t/how-to-add-a-png-texture-to-a-cube/15040">
+  TEXTURES THREEJS
+  </a>
+* 
 
