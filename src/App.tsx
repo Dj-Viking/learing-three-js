@@ -17,24 +17,15 @@ const App: React.FC<Record<string, unknown>> = () => {
   const controls = new OrbitControls(
     Camera, Renderer.domElement
   );
-  controls.target.set(0, 20, 0);
+  Camera.position.set(0, 20, 0);
   controls.update();
 
   document.addEventListener("mousemove", (event) => {
     uniforms.u_mouse.value.x = event.clientX;
     uniforms.u_mouse.value.y = event.clientY;
 
-    // Camera.position.z = 5 + (event.clientY / 30) / 2;
+    // Camera.position.y = 5 + (event.clientY / 30) / 2;
   });
-  
-  // document.addEventListener("keyup", (event) => {
-  //   if (event.key === "ArrowUp") {
-  //     Camera.position.z += 5;
-  //   }
-  //   if (event.key === "ArrowDown") {
-  //     Camera.position.z -= 5;
-  //   }
-  // });
   
   window.document.body.appendChild(Renderer.domElement);
 
@@ -56,7 +47,9 @@ const App: React.FC<Record<string, unknown>> = () => {
       setCanvasDimensions(Renderer.domElement, windowWidthState, windowHeightState);
     }
     Renderer.setSize(windowWidthState, windowHeightState);
-    return void 0;
+    return () => {
+      window.removeEventListener("resize", () => void 0);
+    };
   }, [windowHeightState, windowWidthState]);
 
   // true start automatically

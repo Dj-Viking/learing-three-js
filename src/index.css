@@ -1,6 +1,7 @@
 
 * {
   margin: 0;
+  cursor: grab; 
 }
 
 body {
@@ -16,3 +17,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
